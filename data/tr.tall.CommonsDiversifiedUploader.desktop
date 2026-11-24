@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=Commons Diversified Uploader
+GenericName=Photo uploader for Wikimedia Commons
+GenericName[tr]=Wikimedia Commons fotoğraf yükleyici
+Comment=Identify players by jersey number and upload match photos to Wikimedia Commons
+Comment[tr]=Forma numarasından oyuncuları bulup maç fotoğraflarını Wikimedia Commons'a yükleyin
+Exec=commons-diversified-uploader %u
+Icon=tr.tall.CommonsDiversifiedUploader
+Terminal=false
+Categories=Graphics;Photography;GTK;
+MimeType=x-scheme-handler/tr.tall.commonsdiversifieduploader;
+StartupNotify=true
+StartupWMClass=tr.tall.CommonsDiversifiedUploader

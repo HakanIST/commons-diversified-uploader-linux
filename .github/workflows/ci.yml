@@ -1,0 +1,41 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  package:
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: amd64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet test core -c Release
+      - run: packaging/build-deb.sh ${{ matrix.arch }}
+      - name: Install the package
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ./build/*.deb xvfb dbus imagemagick adwaita-icon-theme fonts-cantarell
+      - name: Screenshots
+        run: packaging/screenshots.sh /opt/commons-diversified-uploader build/screenshots
+      - uses: actions/upload-artifact@v4
+        with:
+          name: commons-diversified-uploader-${{ matrix.arch }}-deb
+          path: build/*.deb
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots-${{ matrix.arch }}
+          path: build/screenshots

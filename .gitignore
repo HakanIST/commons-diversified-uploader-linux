@@ -1,0 +1,8 @@
+bin/
+obj/
+build/
+.vs/
+*.user
+.DS_Store
+secrets.env
+*.env
