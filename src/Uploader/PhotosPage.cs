@@ -21,6 +21,7 @@ internal sealed partial class MainWindow
     private Gtk.FlowBox? _grid;
     private Gtk.Box? _inspector;
     private Gtk.Button? _analyzeButton;
+    private Gtk.Box? _issues;
     private string _filter = "all";
     private string? _selected;
     private string? _inspectorSignature;
@@ -43,6 +44,9 @@ internal sealed partial class MainWindow
             bar.Append(toggle);
         }
         _photosPage.Append(bar);
+        _issues = VBox(4);
+        _issues.SetMarginStart(14); _issues.SetMarginEnd(14); _issues.SetMarginBottom(8);
+        _photosPage.Append(_issues);
 
         _grid = Gtk.FlowBox.New();
         _grid.SetSelectionMode(Gtk.SelectionMode.Single);
@@ -120,7 +124,7 @@ internal sealed partial class MainWindow
                 card = _cards[row.Name] = MakeCard(row);
                 _grid!.Append(card.Root);
             }
-            card.Title.SetText(row.Players.Count > 0 ? string.Join(", ", row.Players.Select(p => $"{p.Number} {p.Name}")) : T(row.Analyzed ? "Oyuncu bulunamadı" : "Analiz bekliyor"));
+            card.Title.SetText(Session.Summary(row));
             card.Root.SetOpacity(row.Include ? 1 : 0.45);
             card.Tag.SetVisible(row.Uploaded != null || row.UploadError != null);
             card.Tag.SetText(T(row.Uploaded != null ? "Yüklendi" : "Hata"));
@@ -129,6 +133,11 @@ internal sealed partial class MainWindow
             card.Root.GetParent()?.SetVisible(Filters.First(f => f.Key == _filter).Matches(row));
         }
         foreach (var (key, title, matches) in Filters) _filterButtons[key].SetLabel($"{T(title)} {rows.Count(matches)}");
+        // Kadro ya da forma rengi eksikse oyuncu bulunamaz; nedenini açıkça söyle.
+        Clear(_issues!);
+        var issues = _session.SetupIssues();
+        _issues!.SetVisible(issues.Count > 0);
+        foreach (var issue in issues) _issues.Append(Label("⚠ " + issue, "warning"));
         var pending = rows.Count(r => !r.Analyzed);
         _analyzeButton!.SetLabel(pending > 0 ? T("Analiz et ({0})", pending) : T("Tümü analiz edildi"));
         _analyzeButton.SetSensitive(pending > 0 && !_busy);
