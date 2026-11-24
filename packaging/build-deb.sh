@@ -48,4 +48,5 @@ if command -v gtk-update-icon-cache >/dev/null 2>&1; then gtk-update-icon-cache 
 POSTINST
 cp "$root/DEBIAN/postinst" "$root/DEBIAN/postrm"
 chmod 755 "$root/DEBIAN/postinst" "$root/DEBIAN/postrm"
-dpkg-deb --build --root-owner-group "$root" "build/${name}_${version}_${arch}.deb"
+# The file name carries no version so that the "latest release" download link stays stable.
+dpkg-deb --build --root-owner-group "$root" "build/${name}_${arch}.deb"

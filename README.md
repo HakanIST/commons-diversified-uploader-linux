@@ -17,8 +17,12 @@ Ubuntu 24.04 or newer (or another distribution with GTK 4.12 and
 libadwaita 1.5):
 
 ```sh
-sudo apt install ./commons-diversified-uploader_0.1.0_amd64.deb
+wget https://github.com/HakanIST/commons-diversified-uploader-linux/releases/latest/download/commons-diversified-uploader_amd64.deb
+sudo apt install ./commons-diversified-uploader_amd64.deb
 ```
+
+Use `commons-diversified-uploader_arm64.deb` on ARM machines. Remove it
+with `sudo apt remove commons-diversified-uploader`.
 
 The package is built by CI for `amd64` and `arm64`. On first analysis the
 app downloads the recognition model (about 1 GB) from Hugging Face.

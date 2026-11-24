@@ -34,6 +34,7 @@ internal sealed partial class MainWindow
         header.SetTitleWidget(switcher);
         _folderButton = Button(T("Klasör değiştir"), ChooseFolder);
         header.PackStart(_folderButton);
+        _account.SetWrap(false);
         header.PackEnd(_account);
 
         _steps.AddTitledWithIcon(Page(_matchPage.Margins(24)), "match", T("Maç"), "emblem-system-symbolic");
